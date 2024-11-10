@@ -28,14 +28,15 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(Smart_Mirror C ASM)
+project(Smart_Mirror C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Smart_Mirror Smart_Mirror.c )
+add_executable(Smart_Mirror Smart_Mirror.c lcd_i2c.c lcd_i2c.h  )
+
 
 pico_set_program_name(Smart_Mirror "Smart_Mirror")
 pico_set_program_version(Smart_Mirror "0.1")
@@ -58,15 +59,7 @@ target_include_directories(Smart_Mirror PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
-        hardware_spi
         hardware_i2c
-        hardware_dma
-        hardware_pio
-        hardware_interp
-        hardware_timer
-        hardware_watchdog
-        hardware_clocks
-        pico_cyw43_arch_none
         )
 
 pico_add_extra_outputs(Smart_Mirror)
