@@ -45,7 +45,7 @@ pico_set_program_version(Smart_Mirror "0.1")
 pico_generate_pio_header(Smart_Mirror ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(Smart_Mirror 1)
+pico_enable_stdio_uart(Smart_Mirror 0)
 pico_enable_stdio_usb(Smart_Mirror 1)
 
 # Add the standard library to the build
@@ -60,6 +60,7 @@ target_include_directories(Smart_Mirror PRIVATE
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
         hardware_i2c
+        pico_cyw43_arch_none
         )
 
 pico_add_extra_outputs(Smart_Mirror)
