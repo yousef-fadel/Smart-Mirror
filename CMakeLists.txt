@@ -60,6 +60,7 @@ target_include_directories(Smart_Mirror PRIVATE
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
         hardware_i2c
+        hardware_pwm  
         pico_cyw43_arch_none
         )
 
