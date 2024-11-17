@@ -4,14 +4,15 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "wiper.h"
+#include "light_sensor.h"
 
 int main()
 {
     stdio_init_all();
     while (1)
     {
-
-        printf("hi");
-        sleep_ms(3000);
+        int something = read_light_sensor();
+        printf("res: %d \n", something);
+        sleep_ms(1000);
     }
 }
