@@ -3,7 +3,7 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "wiper.c"
+#include "wiper.h"
 
 int main()
 {
