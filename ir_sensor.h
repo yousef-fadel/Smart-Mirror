@@ -6,7 +6,7 @@
 #include <string.h>
 #include "pico/stdlib.h"
 
-#define IR_SENSOR_PIN 0
+#define IR_SENSOR_PIN 1
 void init_ir_sensor();
 bool read_ir_sensor();
 

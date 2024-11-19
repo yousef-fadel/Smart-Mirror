@@ -8,7 +8,6 @@ void wiper_init()
 {
     gpio_init(SERVO_PIN);
     gpio_set_dir(SERVO_PIN, GPIO_OUT);
-
     gpio_set_function(SERVO_PIN, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(SERVO_PIN);
     pwm_set_wrap(slice_num, WRAP);
