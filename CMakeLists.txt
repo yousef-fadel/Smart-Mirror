@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Smart_Mirror Smart_Mirror.c lcd_i2c.c lcd_i2c.h wiper.c wiper.h light_sensor.c light_sensor.h)
+add_executable(Smart_Mirror Smart_Mirror.c lcd_i2c.c lcd_i2c.h wiper.c wiper.h light_sensor.c light_sensor.h ir_sensor.h ir_sensor.c)
 
 
 pico_set_program_name(Smart_Mirror "Smart_Mirror")
