@@ -9,10 +9,12 @@
 
 #define time 5000
 
-#define SERVO_PIN 3
-#define WRAP 10000
+#define SERVO_PIN 0
+#define WRAP 20000
 #define CLKDIV 16.0f
 
+void wiperReset();
+void wiperTest();
 void wiper_init();
 void wiperOn();
 void wiperOff();
