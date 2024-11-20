@@ -11,7 +11,7 @@ void ultra_sonic_init()
 int read_ultra_sonic()
 {
     gpio_put(TRIG_PIN, 1);
-    sleep_us(10);
+    sleep_ms(10);
     gpio_put(TRIG_PIN, 0);
 
     while (gpio_get(ECHO_PIN) == 0)

@@ -9,7 +9,7 @@
 
 #define time 5000
 
-#define SERVO_PIN 0
+#define SERVO_PIN 11
 #define WRAP 20000
 #define CLKDIV 16.0f
 

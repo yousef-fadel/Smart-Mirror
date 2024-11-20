@@ -6,8 +6,9 @@
 #include <string.h>
 #include "pico/stdlib.h"
 
-#define IR_SENSOR_PIN 1
-void init_ir_sensor();
-bool read_ir_sensor();
+#define ACTIVATE_MIRROR_IR_SENSOR 19
+#define ACTIVATE_WIPER_IR_SENSOR 20
+void ir_sensor_init(int pin);
+int read_ir_sensor(int pin);
 
 #endif

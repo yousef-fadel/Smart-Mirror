@@ -1,13 +1,13 @@
 #include "ir_sensor.h"
 
-void init_ir_sensor()
+void ir_sensor_init(int pin)
 {
 
-    gpio_init(IR_SENSOR_PIN);
-    gpio_set_dir(IR_SENSOR_PIN, GPIO_IN);
+    gpio_init(pin);
+    gpio_set_dir(pin, GPIO_IN);
 }
 
-bool read_ir_sensor()
+int read_ir_sensor(pin)
 {
-    return gpio_get(IR_SENSOR_PIN);
+    return gpio_get(pin);
 }
