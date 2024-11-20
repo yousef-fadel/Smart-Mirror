@@ -7,7 +7,7 @@ void ir_sensor_init(int pin)
     gpio_set_dir(pin, GPIO_IN);
 }
 
-int read_ir_sensor(pin)
+int read_ir_sensor(int pin)
 {
     return gpio_get(pin);
 }
