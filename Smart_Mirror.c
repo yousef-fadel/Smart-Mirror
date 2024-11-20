@@ -10,10 +10,10 @@
 
 void init()
 {
-    led_init();
-    wiper_init();
-    light_sensor_init();
-    ir_sensor_init();
+    // led_init();
+    // wiper_init();
+    // light_sensor_init();
+    // ir_sensor_init();
     lcd_init();
 }
 
@@ -21,6 +21,9 @@ int main()
 {
     stdio_init_all();
     init();
+    lcd_set_cursor(0, 0);
+    lcd_string("hello");
+
     while (1)
     {
         int lightValue = read_light_sensor();
