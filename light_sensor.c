@@ -9,5 +9,5 @@ void light_sensor_init()
 int read_light_sensor()
 {
     adc_select_input(0);
-    return adc_read() / 16;
+    return adc_read() / 12;
 }
