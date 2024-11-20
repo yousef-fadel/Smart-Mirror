@@ -19,9 +19,9 @@ void wiper_init()
 void wiperOn()
 {
     pwm_set_gpio_level(SERVO_PIN, 6000);
-    sleep_ms(2000);
+    sleep_ms(500);
     pwm_set_gpio_level(SERVO_PIN, 13750);
-    sleep_ms(2000);
+    sleep_ms(500);
     alarm_id = add_alarm_in_ms(time, timer_interrupt_handler, NULL, false);
 }
 

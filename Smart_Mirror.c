@@ -39,19 +39,23 @@ int main()
         {
             int lightIntensity = read_light_sensor();
             lcd_clear();
-            lcd_string("hello");
+            lcd_string("Weather is 25C");
             printf("i am activated, light is %d\n", lightIntensity);
             set_led(lightIntensity);
-            // if (!read_ir_sensor(ACTIVATE_WIPER_IR_SENSOR))
-            // {
-            //     wiperOn();
-            // }
+            if (!read_ir_sensor(ACTIVATE_WIPER_IR_SENSOR))
+            {
+                lcd_clear();
+                lcd_string("Wiper is on");
+                wiperOn();
+            }
+            else
+                wiperOff();
         }
         else
         {
             set_led(0);
             lcd_clear();
-            lcd_string("mesh sha8al");
+            wiperOff();
             printf("i am not activated 3ashan 5awal\n");
         }
         sleep_ms(500);
