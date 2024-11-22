@@ -41,6 +41,7 @@ int main()
             lcd_string("Weather is 25C");
             while (1)
             {
+                sleep_ms(500);
                 int lightIntensity = read_light_sensor();
                 printf("i am activated, light is %d\n", lightIntensity);
                 set_led(lightIntensity);
@@ -61,7 +62,7 @@ int main()
             set_led(0);
             lcd_clear();
             wiperOff();
-            printf("i am not activated 3ashan 5awal\n");
+            printf("i am not activated \n");
         }
         sleep_ms(500);
     }
