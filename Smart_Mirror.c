@@ -10,6 +10,7 @@
 #include "led.h"
 #include "ultra_sonic_sensor.h"
 
+volatile bool mirror_timer_finished = false;
 void init()
 {
     led_init();
@@ -29,13 +30,23 @@ void gpio_wiper_isr(uint gpio, uint32_t events)
     lcd_clear();
     lcd_string("Weather is 25C");
 }
+
+int64_t mirror_on_timer()
+{
+    int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
+    if (mirrorActivation)
+        return -1; // mesh error, this makes so the timer reactivates for the same amount of time we originally input
+    mirror_timer_finished = true;
+    return 0; // disables timer
+}
 int main()
 {
     stdio_init_all();
     init();
 
     gpio_set_irq_enabled_with_callback(read_ir_sensor(ACTIVATE_MIRROR_IR_SENSOR), GPIO_IRQ_LEVEL_LOW, true, &gpio_wiper_isr);
-    irq_set_priority(IO_IRQ_BANK0, 0);
+    // need to have the priority lower than the timer
+    // irq_set_priority(IO_IRQ_BANK0, 0);
 
     lcd_set_cursor(0, 0);
     while (1)
@@ -43,10 +54,11 @@ int main()
         int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
         if (mirrorActivation)
         {
+            add_alarm_in_ms(10000, mirror_on_timer, NULL, true);
             irq_set_enabled(IO_IRQ_BANK0, 1);
             lcd_clear();
             lcd_string("Weather is 25C");
-            while (1)
+            while (!mirror_timer_finished)
             {
                 sleep_ms(500);
                 int lightIntensity = read_light_sensor();
