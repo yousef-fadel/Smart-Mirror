@@ -21,15 +21,21 @@ void init()
     ultra_sonic_init();
 }
 
-// char res[2000] = "light : ";
-// char numStr[20];
-// sprintf(numStr, "%d", lightIntensity); // Convert integer to string
-
-// strcat(res, numStr);
+void gpio_wiper_isr(uint gpio, uint32_t events)
+{
+    lcd_clear();
+    lcd_string("Wiper is on");
+    wiperOn();
+    lcd_clear();
+    lcd_string("Weather is 25C");
+}
 int main()
 {
     stdio_init_all();
     init();
+
+    gpio_set_irq_enabled_with_callback(read_ir_sensor(ACTIVATE_MIRROR_IR_SENSOR), GPIO_IRQ_LEVEL_LOW, true, &gpio_wiper_isr);
+    irq_set_priority(IO_IRQ_BANK0, 0);
 
     lcd_set_cursor(0, 0);
     while (1)
@@ -37,6 +43,7 @@ int main()
         int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
         if (mirrorActivation)
         {
+            irq_set_enabled(IO_IRQ_BANK0, 1);
             lcd_clear();
             lcd_string("Weather is 25C");
             while (1)
@@ -45,20 +52,11 @@ int main()
                 int lightIntensity = read_light_sensor();
                 printf("i am activated, light is %d\n", lightIntensity);
                 set_led(lightIntensity);
-                if (!read_ir_sensor(ACTIVATE_WIPER_IR_SENSOR))
-                {
-                    lcd_clear();
-                    lcd_string("Wiper is on");
-                    wiperOn();
-                    lcd_clear();
-                    lcd_string("Weather is 25C");
-                }
-                else
-                    wiperOff();
             }
         }
         else
         {
+            irq_set_enabled(IO_IRQ_BANK0, 0);
             set_led(0);
             lcd_clear();
             wiperOff();
