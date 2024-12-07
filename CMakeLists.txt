@@ -35,11 +35,21 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Smart_Mirror Smart_Mirror.c lcd_i2c.c lcd_i2c.h wiper.c wiper.h 
-                light_sensor.c light_sensor.h ir_sensor.h ir_sensor.c led.h led.c
-                ultra_sonic_sensor.c ultra_sonic_sensor.h)
-
-
+add_executable(Smart_Mirror 
+    Smart_Mirror.c 
+    actuators/lcd_i2c.c 
+    actuators/lcd_i2c.h 
+    actuators/wiper.c 
+    actuators/wiper.h 
+    actuators/led.h 
+    actuators/led.c 
+    sensors/light_sensor.c 
+    sensors/light_sensor.h 
+    sensors/ir_sensor.h 
+    sensors/ir_sensor.c 
+    sensors/ultra_sonic_sensor.c 
+    sensors/ultra_sonic_sensor.h
+)
 
 pico_set_program_name(Smart_Mirror "Smart_Mirror")
 pico_set_program_version(Smart_Mirror "0.1")
@@ -70,6 +80,7 @@ target_include_directories( FreeRTOS PUBLIC
 		FreeRTOS-Kernel/include
 		include/
 		FreeRTOS-Kernel/portable/GCC/ARM_CM0
+        sensors/
 	)
     
 # Add any user requested libraries

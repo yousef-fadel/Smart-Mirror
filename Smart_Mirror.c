@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <string.h>
-#include "lcd_i2c.h"
+#include "actuators/lcd_i2c.h"
+#include "actuators/wiper.h"
+#include "actuators/led.h"
+#include "sensors/light_sensor.h"
+#include "sensors/ir_sensor.h"
+#include "sensors/ultra_sonic_sensor.h"
+#include "pico/stdlib.h"
+#include "pico/cyw43_arch.h"
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
 #include "task.h"
-#include "pico/cyw43_arch.h"
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
-#include "wiper.h"
-#include "sensors/light_sensor.h"
-#include "sensors/ir_sensor.h"
-#include "led.h"
-#include "sensors/ultra_sonic_sensor.h"
 
 volatile bool mirror_timer_finished = false;
 void init()
