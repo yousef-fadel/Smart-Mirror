@@ -62,8 +62,7 @@ pico_enable_stdio_uart(Smart_Mirror 0)
 pico_enable_stdio_usb(Smart_Mirror 1)
 
 # Add the standard library to the build
-target_link_libraries(Smart_Mirror
-        pico_stdlib )
+target_link_libraries(Smart_Mirror pico_stdlib )
 
 # Add the standard include files to the build
 target_include_directories(Smart_Mirror PRIVATE
@@ -74,21 +73,22 @@ FILE(GLOB FreeRTOS_src FreeRTOS-Kernel/*.c)
 add_library( FreeRTOS STATIC
 	${FreeRTOS_src}
 	FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
+	FreeRTOS-Kernel/portable/GCC/ARM_CM0/portasm.c
 	FreeRTOS-Kernel/portable/MemMang/heap_4.c
 )
+
 target_include_directories( FreeRTOS PUBLIC
 		FreeRTOS-Kernel/include
 		include/
 		FreeRTOS-Kernel/portable/GCC/ARM_CM0
-        sensors/
 	)
     
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
+        FreeRTOS
         hardware_i2c
         hardware_pwm  
         hardware_adc
-        FreeRTOS
         pico_cyw43_arch_none
         )
 

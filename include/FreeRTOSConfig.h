@@ -65,8 +65,10 @@
 //#define configASSERT( ( x ) ) assert()
 
 /* FreeRTOS MPU specific definitions. */
-#define configENABLE_MPU                                       1
-#define configSYSTEM_CALL_STACK_SIZE                           256
+// the MPU is disabled, since it gives an error for some forsaken reason
+// hope we dont need memory protection :*)
+#define configENABLE_MPU                                       0
+#define configSYSTEM_CALL_STACK_SIZE                           512 
 #define configINCLUDE_APPLICATION_DEFINED_PRIVILEGED_FUNCTIONS 0
 #define configTOTAL_MPU_REGIONS                                8 /* Default value. */
 #define configTEX_S_C_B_FLASH                                  0x07UL /* Default value. */
