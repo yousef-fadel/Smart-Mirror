@@ -68,24 +68,9 @@ target_link_libraries(Smart_Mirror pico_stdlib )
 target_include_directories(Smart_Mirror PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
-
-FILE(GLOB FreeRTOS_src FreeRTOS-Kernel/*.c)
-add_library( FreeRTOS STATIC
-	${FreeRTOS_src}
-	FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
-	FreeRTOS-Kernel/portable/GCC/ARM_CM0/portasm.c
-	FreeRTOS-Kernel/portable/MemMang/heap_4.c
-)
-
-target_include_directories( FreeRTOS PUBLIC
-		FreeRTOS-Kernel/include
-		include/
-		FreeRTOS-Kernel/portable/GCC/ARM_CM0
-	)
     
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
-        FreeRTOS
         hardware_i2c
         hardware_pwm  
         hardware_adc
