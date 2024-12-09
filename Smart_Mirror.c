@@ -1,21 +1,15 @@
 #include <stdio.h>
 #include <string.h>
-
 #include "actuators/lcd_i2c.h"
+#include "pico/cyw43_arch.h"
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
 #include "actuators/wiper.h"
-#include "actuators/led.h"
 #include "sensors/light_sensor.h"
 #include "sensors/ir_sensor.h"
+#include "actuators/led.h"
 #include "sensors/ultra_sonic_sensor.h"
 
-#include "pico/stdlib.h"
-#include "pico/cyw43_arch.h"
-
-#include "FreeRTOS.h"
-#include "FreeRTOSConfig.h"
-#include "task.h"
-
-volatile bool mirror_timer_finished = false;
 void init()
 {
     led_init();
@@ -27,80 +21,49 @@ void init()
     ultra_sonic_init();
 }
 
-void ultraSonicSensorTask(void *param)
-{
-    int mirrorOn = read_ultra_sonic();
-    if(mirrorOn)
-    {
-        lcd_clear();
-        lcd_string("I am activated!");
-    }
-}
+// char res[2000] = "light : ";
+// char numStr[20];
+// sprintf(numStr, "%d", lightIntensity); // Convert integer to string
 
+// strcat(res, numStr);
 int main()
 {
     stdio_init_all();
     init();
+
     lcd_set_cursor(0, 0);
-    TaskHandle_t gSONICtask = NULL;
-    uint32_t status = xTaskCreate(ultraSonicSensorTask, "Ultra Sonic", 128, NULL, 1, NULL);
-    vTaskStartScheduler();
-    while(1)
-        ;
+    while (1)
+    {
+        int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
+        if (mirrorActivation)
+        {
+            lcd_clear();
+            lcd_string("Weather is 25C");
+            while (1)
+            {
+                sleep_ms(500);
+                int lightIntensity = read_light_sensor();
+                printf("i am activated, light is %d\n", lightIntensity);
+                set_led(lightIntensity);
+                if (!read_ir_sensor(ACTIVATE_WIPER_IR_SENSOR))
+                {
+                    lcd_clear();
+                    lcd_string("Wiper is on");
+                    wiperOn();
+                    lcd_clear();
+                    lcd_string("Weather is 25C");
+                }
+                else
+                    wiperOff();
+            }
+        }
+        else
+        {
+            set_led(0);
+            lcd_clear();
+            wiperOff();
+            printf("i am not activated \n");
+        }
+        sleep_ms(500);
+    }
 }
-
-// void gpio_wiper_isr(uint gpio, uint32_t events)
-// {
-//     lcd_clear();
-//     lcd_string("Wiper is on");
-//     wiperOn();
-//     lcd_clear();
-//     lcd_string("Weather is 25C");
-// }
-
-// int64_t mirror_on_timer()
-// {
-//     int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
-//     if (mirrorActivation)
-//         return -1; // mesh error, this makes so the timer reactivates for the same amount of time we originally input
-//     mirror_timer_finished = true;
-//     return 0; // disables timer
-// }
-// int main()
-// {
-//     stdio_init_all();
-//     init();
-
-//     gpio_set_irq_enabled_with_callback(read_ir_sensor(ACTIVATE_MIRROR_IR_SENSOR), GPIO_IRQ_LEVEL_LOW, true, &gpio_wiper_isr);
-//     // need to have the priority lower than the timer
-//     // irq_set_priority(IO_IRQ_BANK0, 0);
-
-//     lcd_set_cursor(0, 0);
-//     while (1)
-//     {
-//         int mirrorActivation = 1;
-//         if (mirrorActivation)
-//         {
-//             add_alarm_in_ms(10000, mirror_on_timer, NULL, true);
-//             irq_set_enabled(IO_IRQ_BANK0, 1);
-//             lcd_clear();
-//             lcd_string("Weather is 25C");
-//             while (!mirror_timer_finished)
-//             {
-//                 sleep_ms(500);
-//                 int lightIntensity = read_light_sensor();
-//                 printf("i am activated, light is %d\n", lightIntensity);
-//                 set_led(lightIntensity);
-//             }
-//         }
-//         else
-//         {
-//             irq_set_enabled(IO_IRQ_BANK0, 0);
-//             set_led(0);
-//             lcd_clear();
-//             wiperOff();
-//             printf("i am not activated \n");
-//         }
-//         sleep_ms(500);
-//     }
-// }
