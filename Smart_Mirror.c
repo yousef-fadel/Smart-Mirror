@@ -15,7 +15,6 @@ void init()
     led_init();
     wiper_init();
     light_sensor_init();
-    ir_sensor_init(ACTIVATE_MIRROR_IR_SENSOR);
     ir_sensor_init(ACTIVATE_WIPER_IR_SENSOR);
     lcd_init();
     ultra_sonic_init();
@@ -34,12 +33,14 @@ int main()
     lcd_set_cursor(0, 0);
     while (1)
     {
-        int mirrorActivation = read_ultra_sonic(ACTIVATE_MIRROR_IR_SENSOR);
+        int mirrorActivation = read_ultra_sonic();
         if (mirrorActivation)
         {
+            printf("Mirror is active\n");
+
             lcd_clear();
             lcd_string("Weather is 25C");
-            while (1)
+            while (mirrorActivation)
             {
                 sleep_ms(500);
                 int lightIntensity = read_light_sensor();
@@ -50,11 +51,14 @@ int main()
                     lcd_clear();
                     lcd_string("Wiper is on");
                     wiperOn();
+                }
+                else
+                {
+                    wiperOff();
                     lcd_clear();
                     lcd_string("Weather is 25C");
                 }
-                else
-                    wiperOff();
+                mirrorActivation = read_ultra_sonic();
             }
         }
         else

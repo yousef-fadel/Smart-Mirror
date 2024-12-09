@@ -22,21 +22,9 @@ void wiperOn()
     sleep_ms(500);
     pwm_set_gpio_level(SERVO_PIN, 13750);
     sleep_ms(500);
-    alarm_id = add_alarm_in_ms(time, timer_interrupt_handler, NULL, false);
-}
-
-int64_t timer_interrupt_handler(alarm_id_t id, void *user_data)
-{
-    wiperOff();
 }
 
 void wiperOff()
 {
     pwm_set_gpio_level(SERVO_PIN, 6000);
-    timer_disable();
-}
-
-void timer_disable()
-{
-    cancel_alarm(alarm_id);
 }
