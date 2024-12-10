@@ -37,6 +37,7 @@ pico_sdk_init()
 
 add_executable(Smart_Mirror 
     Smart_Mirror.c 
+    Smart_Mirror.h 
     actuators/lcd_i2c.c 
     actuators/lcd_i2c.h 
     actuators/wiper.c 

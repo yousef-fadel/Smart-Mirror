@@ -36,7 +36,7 @@ int read_ultra_sonic()
 
     uint32_t duration = absolute_time_diff_us(start_time, end_time);
     float distance = duration * 0.034 / 2;
-    printf("distance is %f\n", distance);
+    // printf("distance is %f\n", distance);
 
     if (distance <= 100 && distance > 1)
     {
