@@ -14,9 +14,7 @@
 #include "actuators/wiper.h"
 #include "actuators/led.h"
 #include "actuators/lcd_i2c.h"
-#include "weather_fetch.h"
-#include "lwip/altcp_tls.h"
-#include "example_http_client_util.h"
+#include "wifi/weather_fetch.h"
 
 
 #endif

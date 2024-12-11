@@ -35,7 +35,7 @@ pico_sdk_init()
 
 pico_add_library(example_lwip_http_util NOFLAG)
 target_sources(example_lwip_http_util INTERFACE
-        ${CMAKE_CURRENT_LIST_DIR}/example_http_client_util.c
+        ${CMAKE_CURRENT_LIST_DIR}/wifi/example_http_client_util.c
         )
 pico_mirrored_target_link_libraries(example_lwip_http_util INTERFACE
         pico_lwip_http
@@ -62,8 +62,8 @@ add_executable(Smart_Mirror
     sensors/ir_sensor.c 
     sensors/ultra_sonic_sensor.h
     sensors/ultra_sonic_sensor.c 
-    weather_fetch.h
-    weather_fetch.c
+    wifi/weather_fetch.h
+    wifi/weather_fetch.c
 )
 
 pico_set_program_name(Smart_Mirror "Smart_Mirror")

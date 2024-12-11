@@ -6,7 +6,7 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 
-#define LED_PIN 15
+#define LED_PIN 18 
 
 void led_init();
 void set_led(int lightIntensity);
