@@ -33,23 +33,37 @@ project(Smart_Mirror C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+pico_add_library(example_lwip_http_util NOFLAG)
+target_sources(example_lwip_http_util INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}/example_http_client_util.c
+        )
+pico_mirrored_target_link_libraries(example_lwip_http_util INTERFACE
+        pico_lwip_http
+        pico_lwip_mbedtls
+        pico_mbedtls
+        )
+target_include_directories(example_lwip_http_util INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}
+        )
+
 # Add executable. Default name is the project name, version 0.1
 add_executable(Smart_Mirror 
-    Smart_Mirror.c 
-    tls_common.c
     Smart_Mirror.h 
-    actuators/lcd_i2c.c 
+    Smart_Mirror.c 
     actuators/lcd_i2c.h 
-    actuators/wiper.c 
+    actuators/lcd_i2c.c 
     actuators/wiper.h 
+    actuators/wiper.c 
     actuators/led.h 
     actuators/led.c 
-    sensors/light_sensor.c 
     sensors/light_sensor.h 
+    sensors/light_sensor.c 
     sensors/ir_sensor.h 
     sensors/ir_sensor.c 
-    sensors/ultra_sonic_sensor.c 
     sensors/ultra_sonic_sensor.h
+    sensors/ultra_sonic_sensor.c 
+    weather_fetch.h
+    weather_fetch.c
 )
 
 pico_set_program_name(Smart_Mirror "Smart_Mirror")
@@ -68,6 +82,7 @@ target_link_libraries(Smart_Mirror pico_stdlib )
 # Add the standard include files to the build
 target_include_directories(Smart_Mirror PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_CURRENT_LIST_DIR}/wifi
 )
 add_definitions(-DMBEDTLS_USER_CONFIG_FILE="mbedtls-config-changes.h") 
 
@@ -76,9 +91,8 @@ target_link_libraries(Smart_Mirror
         hardware_i2c
         hardware_pwm  
         hardware_adc
-        pico_cyw43_arch_lwip_poll
-        pico_lwip_mbedtls
-        pico_mbedtls
+        pico_cyw43_arch_lwip_threadsafe_background
+        example_lwip_http_util
         )
 
 target_compile_definitions(Smart_Mirror PRIVATE
