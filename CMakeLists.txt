@@ -65,17 +65,28 @@ pico_enable_stdio_usb(Smart_Mirror 1)
 # Add the standard library to the build
 target_link_libraries(Smart_Mirror pico_stdlib )
 
+target_compile_definitions(Smart_Mirror PRIVATE
+        WIFI_SSID=\"${WIFI_SSID}\"
+        WIFI_PASSWORD=\"${WIFI_PASSWORD}\"
+        # By default verification is optional (MBEDTLS_SSL_VERIFY_OPTIONAL)
+        # Make it required for this test
+        ALTCP_MBEDTLS_AUTHMODE=MBEDTLS_SSL_VERIFY_REQUIRED
+        )
+
 # Add the standard include files to the build
 target_include_directories(Smart_Mirror PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
-    
+add_definitions(-DMBEDTLS_USER_CONFIG_FILE="mbedtls-config-changes.h") 
+
 # Add any user requested libraries
 target_link_libraries(Smart_Mirror 
         hardware_i2c
         hardware_pwm  
         hardware_adc
-        pico_cyw43_arch_none
+        pico_cyw43_arch_lwip_poll
+        pico_lwip_mbedtls
+        pico_mbedtls
         )
 
 pico_add_extra_outputs(Smart_Mirror)
