@@ -13,6 +13,8 @@
 #include "actuators/led.h"
 #include "sensors/ultra_sonic_sensor.h"
 
+#define WIFI_SSID "a"
+
 void init();
 
 #endif

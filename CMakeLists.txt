@@ -34,9 +34,9 @@ project(Smart_Mirror C CXX ASM)
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
-
 add_executable(Smart_Mirror 
     Smart_Mirror.c 
+    tls_common.c
     Smart_Mirror.h 
     actuators/lcd_i2c.c 
     actuators/lcd_i2c.h 
@@ -65,14 +65,6 @@ pico_enable_stdio_usb(Smart_Mirror 1)
 # Add the standard library to the build
 target_link_libraries(Smart_Mirror pico_stdlib )
 
-target_compile_definitions(Smart_Mirror PRIVATE
-        WIFI_SSID=\"${WIFI_SSID}\"
-        WIFI_PASSWORD=\"${WIFI_PASSWORD}\"
-        # By default verification is optional (MBEDTLS_SSL_VERIFY_OPTIONAL)
-        # Make it required for this test
-        ALTCP_MBEDTLS_AUTHMODE=MBEDTLS_SSL_VERIFY_REQUIRED
-        )
-
 # Add the standard include files to the build
 target_include_directories(Smart_Mirror PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
@@ -89,5 +81,12 @@ target_link_libraries(Smart_Mirror
         pico_mbedtls
         )
 
+target_compile_definitions(Smart_Mirror PRIVATE
+        WIFI_SSID=\"${WIFI_SSID}\"
+        WIFI_PASSWORD=\"${WIFI_PASSWORD}\"
+        # By default verification is optional (MBEDTLS_SSL_VERIFY_OPTIONAL)
+        # Make it required for this test
+        ALTCP_MBEDTLS_AUTHMODE=MBEDTLS_SSL_VERIFY_REQUIRED
+        )
 pico_add_extra_outputs(Smart_Mirror)
 
