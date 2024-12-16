@@ -1,8 +1,8 @@
 #include "weather_fetch.h"
-#include "jsmn.h"
 
-static char x[10000] ;
+static char x [10000];
 
+// Global buffer to store incoming data
 err_t http_client_receive_print(__unused void *arg, __unused struct altcp_pcb *conn, struct pbuf *p, err_t err) {
     u16_t offset = 0;
     while (offset < p->tot_len) {
@@ -12,8 +12,25 @@ err_t http_client_receive_print(__unused void *arg, __unused struct altcp_pcb *c
     return ERR_OK;
 }
 
+// Function to parse the temperature from the JSON response
+double parse_temperature(const char *json_string)
+{
+    float temperature = 0.0;
+    char localtime[100];
 
-int fetchWeather()
+    // Extract the temperature using sscanf
+    sscanf(strstr(json_string, "\"temperature\":") + 14, "%f", &temperature);
+    printf("%d\n", temperature);
+
+    // Extract the localtime using sscanf
+    sscanf(strstr(json_string, "\"localtime\":\"") + 13, "%99[^\"]", localtime);
+
+    // Print extracted values
+    return temperature;
+}
+
+// Weather fetch function with dynamic request
+double fetchWeather()
 {
     if (cyw43_arch_init()) {
         printf("failed to initialise\n");
@@ -29,30 +46,19 @@ int fetchWeather()
     EXAMPLE_HTTP_REQUEST_T req = {0};
     req.hostname = HOST;
     req.url = URL_REQUEST;
-    req.recv_fn = http_client_receive_print;
+    req.recv_fn = http_client_receive_print; // Incremental parsing callback
+
+    // Perform the HTTP request (synchronously)
     int result = http_client_request_sync(cyw43_arch_async_context(), &req);
 
-
-
-    // test async
-    // EXAMPLE_HTTP_REQUEST_T req2 = req1;
-    // result += http_client_request_async(cyw43_arch_async_context(), &req1);
-    // result += http_client_request_async(cyw43_arch_async_context(), &req2);
-    // while(!req1.complete && !req2.complete) {
-    //     async_context_poll(cyw43_arch_async_context());
-    //     async_context_wait_for_work_ms(cyw43_arch_async_context(), 1000);
-    // }
-
-    // req1.tls_config = altcp_tls_create_config_client(NULL, 0); // https
-    // result += http_client_request_sync(cyw43_arch_async_context(), &req1);
-    // result += http_client_request_sync(cyw43_arch_async_context(), &req1); // repeat
-    // altcp_tls_free_config(req1.tls_config);
 
     if (result != 0) {
         panic("test failed");
     }
-    cyw43_arch_deinit();
-    printf("Test passed\n");
-    sleep_ms(100);
-    return 0;
+
+    // Clean up Wi-Fi resources
+    cyw43_arch_deinit(); 
+    printf("%s\n", x);
+    return parse_temperature(x);
+
 }
