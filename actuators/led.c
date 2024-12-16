@@ -11,5 +11,7 @@ void led_init()
 
 void set_led(int lightIntensity)
 {
+    if(lightIntensity > 255)
+        lightIntensity = 255;
     pwm_set_gpio_level(LED_PIN, lightIntensity);
 }

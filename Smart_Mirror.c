@@ -10,25 +10,29 @@ void init()
     ultra_sonic_init();
 }
 
-void light_detection_isr(uint gpio, uint32_t events)
+bool light_adjust_callback(struct repeating_timer *check_light_timer)
 {
     int lightIntensity = read_light_sensor();
     set_led(lightIntensity);
 }
 
+bool check_time_api_callback(struct repeating_timer * call_timer_api)
+{
+
+}
+
 void wiper_isr(uint gpio, uint32_t events)
 {
-    printf("hi");
     lcd_clear();
     lcd_string("Wiper is on");
     wiperOn();
-    printf("goodbye");
 }
 
 int main()
 {
     stdio_init_all();
     init();
+
     double temperature = fetchWeather();
     char result[100] = "Weather is ";  
     sprintf(result + strlen(result), "%.2f", temperature);
@@ -37,26 +41,25 @@ int main()
     irq_set_priority(IO_IRQ_BANK0, 255); 
     irq_set_enabled(IO_IRQ_BANK0, true); 
 
+    struct repeating_timer check_light_sensor;
+    add_repeating_timer_ms(3000, light_adjust_callback, NULL, &check_light_sensor);
+
+    int lightIntensity = read_light_sensor();
+    set_led(lightIntensity);
+
     lcd_set_cursor(0, 0);
     while (1)
     {
         int mirrorActivation = read_ultra_sonic();
-        if (mirrorActivation)
+        while (mirrorActivation)
         {
-            printf("Mirror is active\n");
-
             lcd_clear();
             lcd_string(result);
-            while (mirrorActivation)
-            {
-                sleep_ms(500);
-                wiperOff();
-                lcd_clear();
-                lcd_string(result);
-                mirrorActivation = read_ultra_sonic();
-            }
+            sleep_ms(500);
+            wiperOff();
+            mirrorActivation = read_ultra_sonic();
         }
-        else
+        if(!mirrorActivation)
         {
             set_led(0);
             lcd_clear();
