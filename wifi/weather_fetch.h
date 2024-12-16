@@ -14,6 +14,6 @@ struct weather_fetch
 
 
 #define HOST "api.weatherstack.com"
-#define URL_REQUEST ""
+#define URL_REQUEST "/current?access_key=d961ecb81a22ba801d3e3ad50bdbda50&query=Cairo"
 
 struct weather_fetch* fetchWeatherAndTime();

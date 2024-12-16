@@ -6,9 +6,10 @@ static char timeFetch [700];
 err_t write_to_weather_buffer(__unused void *arg, __unused struct altcp_pcb *conn, struct pbuf *p, err_t err) {
     u16_t offset = 0;
     while (offset < p->tot_len) {
-        char c  = (char)pbuf_get_at(p, offset++);
-        weatherFetch[offset - 1] = c;
-        timeFetch[offset-1] = c;
+        char c  = (char)pbuf_get_at(p, offset);
+        weatherFetch[offset] = c;
+        timeFetch[offset] = c;
+        offset++;
     }
     return ERR_OK;
 }
@@ -29,8 +30,8 @@ char* parse_time(const char* json_string)
     char *start_pos = strstr(json_string, key);
     start_pos += strlen(key);
     sscanf(start_pos, "%19[^\"]", localtime);  
+    printf("%s\n", localtime);
 
-    printf(" time in method %s\n", localtime);
     return localtime;
 }
 struct weather_fetch* fetchWeatherAndTime()
@@ -63,6 +64,7 @@ struct weather_fetch* fetchWeatherAndTime()
     // Clean up Wi-Fi resources
     cyw43_arch_deinit(); 
     static struct weather_fetch weatherResult;
+    printf("%s\n",timeFetch);
     weatherResult.weather = parse_temperature(weatherFetch);
     weatherResult.timeNow = parse_time(timeFetch);
     return &weatherResult;
