@@ -1,4 +1,17 @@
 #include "weather_fetch.h"
+#include "jsmn.h"
+
+static char x[10000] ;
+
+err_t http_client_receive_print(__unused void *arg, __unused struct altcp_pcb *conn, struct pbuf *p, err_t err) {
+    u16_t offset = 0;
+    while (offset < p->tot_len) {
+        char c  = (char)pbuf_get_at(p, offset++);
+        x[offset - 1] = c;
+    }
+    return ERR_OK;
+}
+
 
 int fetchWeather()
 {
@@ -7,17 +20,19 @@ int fetchWeather()
         return 1;
     }
     cyw43_arch_enable_sta_mode();
-    if (cyw43_arch_wifi_connect_timeout_ms("", "", CYW43_AUTH_WPA2_AES_PSK, 20000)) {
+    if (cyw43_arch_wifi_connect_timeout_ms("Kamalsk", "barca123", CYW43_AUTH_WPA2_AES_PSK, 20000)) {
         printf("failed to connect\n");
         return 1;
     }
 
     // this code works; the other code is commented in case we need async
-    EXAMPLE_HTTP_REQUEST_T req1 = {0};
-    req1.hostname = HOST;
-    req1.url = URL_REQUEST;
-    req1.recv_fn = http_client_receive_print_fn;
-    int result = http_client_request_sync(cyw43_arch_async_context(), &req1);
+    EXAMPLE_HTTP_REQUEST_T req = {0};
+    req.hostname = HOST;
+    req.url = URL_REQUEST;
+    req.recv_fn = http_client_receive_print;
+    int result = http_client_request_sync(cyw43_arch_async_context(), &req);
+
+
 
     // test async
     // EXAMPLE_HTTP_REQUEST_T req2 = req1;

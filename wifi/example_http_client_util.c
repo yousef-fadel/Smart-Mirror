@@ -48,7 +48,6 @@ err_t http_client_header_print_fn(__unused httpc_state_t *connection, __unused v
 
 // Print body to stdout
 err_t http_client_receive_print_fn(__unused void *arg, __unused struct altcp_pcb *conn, struct pbuf *p, err_t err) {
-    HTTP_INFO("\ncontent err %d\n", err);
     u16_t offset = 0;
     while (offset < p->tot_len) {
         char c = (char)pbuf_get_at(p, offset++);
