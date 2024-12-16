@@ -1,4 +1,5 @@
 #include "Smart_Mirror.h"
+struct weather_fetch* api_call_result;
 
 
 void init()
@@ -19,6 +20,7 @@ bool light_adjust_callback(struct repeating_timer *check_light_timer)
 
 bool check_time_api_callback(struct repeating_timer * call_timer_api)
 {
+    api_call_result = fetchWeatherAndTime();
 }
 
 void wiper_isr(uint gpio, uint32_t events)
@@ -55,7 +57,7 @@ int main()
     init();
 
     lcd_string("Fetching weather");
-    struct weather_fetch* api_call_result = fetchWeatherAndTime();
+    api_call_result = fetchWeatherAndTime();
     sleep_ms(5000);
 
     // interrupt for wiper
@@ -69,7 +71,7 @@ int main()
 
     // check if time has been updated while mirror is on every 15 seconds
     struct repeating_timer check_time;
-    add_repeating_timer_ms(15000, check_time_api_callback, NULL, &check_time);
+    add_repeating_timer_ms(30000, check_time_api_callback, NULL, &check_time);
     
 
     lcd_clear();
