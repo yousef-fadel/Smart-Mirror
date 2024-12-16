@@ -6,7 +6,14 @@
 #include "lwip/altcp_tls.h"
 #include "example_http_client_util.h"
 
+struct weather_fetch
+{
+    char *timeNow;
+    float weather;
+};
+
+
 #define HOST "api.weatherstack.com"
 #define URL_REQUEST ""
 
-double fetchWeather();
+struct weather_fetch* fetchWeatherAndTime();

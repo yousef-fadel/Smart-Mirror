@@ -19,17 +19,11 @@ void wiper_init()
 void wiperOn()
 {
     pwm_set_gpio_level(SERVO_PIN, 6000);
-    sleep_ms(500);
+    sleep_ms(2000);
     pwm_set_gpio_level(SERVO_PIN, 13750);
-    sleep_ms(500);
+    sleep_ms(2000);
     pwm_set_gpio_level(SERVO_PIN, 6000);
-    sleep_ms(500);
-    pwm_set_gpio_level(SERVO_PIN, 13750);
-    sleep_ms(500);
-    pwm_set_gpio_level(SERVO_PIN, 6000);
-    sleep_ms(500);
-    pwm_set_gpio_level(SERVO_PIN, 13750);
-    sleep_ms(500);
+    sleep_ms(2000);
 }
 
 void wiperOff()
