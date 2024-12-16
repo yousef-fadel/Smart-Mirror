@@ -14,8 +14,11 @@ void init()
 
 bool light_adjust_callback(struct repeating_timer *check_light_timer)
 {
-    int lightIntensity = read_light_sensor();
-    set_led(lightIntensity);
+    if(read_ultra_sonic())
+    {
+        int lightIntensity = read_light_sensor();
+        set_led(lightIntensity);
+    }
 }
 
 bool check_time_api_callback(struct repeating_timer * call_timer_api)
