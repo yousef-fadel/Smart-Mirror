@@ -61,11 +61,10 @@ int main()
 
     lcd_string("Fetching weather");
     api_call_result = fetchWeatherAndTime();
-    sleep_ms(5000);
 
     // interrupt for wiper
     gpio_set_irq_enabled_with_callback(ACTIVATE_WIPER_IR_SENSOR, GPIO_IRQ_LEVEL_LOW, true, &wiper_isr);
-    irq_set_priority(IO_IRQ_BANK0, 200); 
+    irq_set_priority(IO_IRQ_BANK0, 255); 
     irq_set_enabled(IO_IRQ_BANK0, true); 
 
     // check light every 3 seconds to change LED strip brightness
