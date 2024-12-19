@@ -30,7 +30,6 @@ char* parse_time(const char* json_string)
     char *start_pos = strstr(json_string, key);
     start_pos += strlen(key);
     sscanf(start_pos, "%19[^\"]", localtime);  
-    printf("%s\n", localtime);
 
     return localtime;
 }
@@ -64,7 +63,6 @@ struct weather_fetch* fetchWeatherAndTime()
     // Clean up Wi-Fi resources
     cyw43_arch_deinit(); 
     static struct weather_fetch weatherResult;
-    printf("%s\n",timeFetch);
     weatherResult.weather = parse_temperature(weatherFetch);
     weatherResult.timeNow = parse_time(timeFetch);
     return &weatherResult;

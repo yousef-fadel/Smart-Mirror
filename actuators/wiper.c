@@ -33,4 +33,5 @@ void wiperOn()
 void wiperOff()
 {
     pwm_set_gpio_level(SERVO_PIN, 6000);
+    sleep_ms(100);
 }
